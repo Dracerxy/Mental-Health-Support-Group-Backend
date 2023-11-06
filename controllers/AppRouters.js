@@ -71,7 +71,7 @@ application_routes.get("/logout", (req, res) => {
       const existingUser = await User.findOne({ email });
   
       if (existingUser) {
-        res.redirect("http://localhost:3000/login");
+        // res.redirect("http://localhost:3000/login");
         return res.status(400).json({ error: 'User already exists' });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
