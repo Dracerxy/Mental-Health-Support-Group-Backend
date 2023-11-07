@@ -7,6 +7,7 @@ const application_routes = require("./controllers/AppRouters")
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const UserOauth = require('./schema/UserOauth'); 
+const post_routes = require("./controllers/PostRouters");
 const app=express()
 
 app.use(bodyparser.json());
@@ -66,6 +67,7 @@ db.on("open",()=>console.log("Connected established to the database!!!!"));
 db.on("error",()=>console.log("Error in connection establishment to the database!!"));
 
 app.use("/app",application_routes);
+app.use("/post",post_routes);
 
 app.listen(4000,()=>{
     console.log("Server connected to port:4000")
