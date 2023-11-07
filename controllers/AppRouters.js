@@ -16,23 +16,23 @@ application_routes.get('/auth/google/callback', passport.authenticate('google', 
   });
 
 
-  application_routes.get("/login/success", (req, res) => {
-    if (req.user) {
-      res.status(200).json({
-        success: true,
-        message: "successfull",
-        user: req.user,
-        cookies: req.cookies
-      });
-    }
-  });
+  // application_routes.get("/login/success", (req, res) => {
+  //   if (req.user) {
+  //     res.status(200).json({
+  //       success: true,
+  //       message: "successfull",
+  //       user: req.user,
+  //       cookies: req.cookies
+  //     });
+  //   }
+  // });
   
-  application_routes.get("/login/failed", (req, res) => {
-    res.status(401).json({
-      success: false,
-      message: "failure",
-    });
-  });
+  // application_routes.get("/login/failed", (req, res) => {
+  //   res.status(401).json({
+  //     success: false,
+  //     message: "failure",
+  //   });
+  // });
   
 
 application_routes.get("/logout", (req, res) => {
@@ -113,7 +113,7 @@ application_routes.post('/api/forgot-password', async (req, res) => {
   tokenDatabase[email] = resetToken;
 
   // Send a password reset email to the user (configure nodemailer)
-  const resetLink = `http://localhost:3000/#/reset-password?token=${resetToken}`;
+  const resetLink = `http://localhost:3000/reset-password/token=${resetToken}/email=${email}`;
   const mailOptions = {
     from: 'mntIhIthcrspprt@gmail.com',
     to: email,
@@ -137,17 +137,17 @@ application_routes.post('/api/forgot-password', async (req, res) => {
 
 // Route to reset the password
 application_routes.post('/api/reset-password', async (req, res) => {
-  const { email, token, newPassword } = req.body;
-  console.log(email+token+newPassword);
-  const storedToken = tokenDatabase[email];
-
-  if (!storedToken || storedToken !== token) {
+  const { femail,ftoken,newPassword } = req.body;
+  const storedToken = tokenDatabase[femail];
+  if (!storedToken || storedToken !== ftoken) {
+    console.log('INV')
     return res.status(400).json({ error: 'Invalid token' });
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ femail });
 
   if (!user) {
+    console.log("UNF")
     return res.status(400).json({ error: 'User not found' });
   }
 
@@ -156,7 +156,7 @@ application_routes.post('/api/reset-password', async (req, res) => {
   await user.save();
 
   // Remove the used reset token from the tokenDatabase
-  delete tokenDatabase[email];
+  delete tokenDatabase[femail];
 
   res.status(200).json({ message: 'Password reset successfully' });
 });
