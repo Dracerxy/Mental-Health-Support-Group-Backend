@@ -8,42 +8,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
 //_________________________________________________________________________google authentication_______________________________________________________________________________________
-application_routes.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-application_routes.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: 'http://localhost:3000' }),//here to the replacement of the failure redirect
-  (req, res) => {
-    //redirect url has to be updated after frontend development
-    res.redirect('http://localhost:3000/#/home');
-  });
 
-
-  // application_routes.get("/login/success", (req, res) => {
-  //   if (req.user) {
-  //     res.status(200).json({
-  //       success: true,
-  //       message: "successfull",
-  //       user: req.user,
-  //       cookies: req.cookies
-  //     });
-  //   }
-  // });
-  
-  // application_routes.get("/login/failed", (req, res) => {
-  //   res.status(401).json({
-  //     success: false,
-  //     message: "failure",
-  //   });
-  // });
-  
-
-application_routes.get("/logout", (req, res) => {
-    req.logout(function(err) {
-      if (err) {
-        console.error(err);
-      }
-      // Redirect to the login page or another page after logout change this link after deployment of frontend
-      res.redirect("http://localhost:3000/login");
-    });
-  });
 
 //__________________________________________________________________________signin/signup__________________________________________________________________
 
@@ -140,25 +105,26 @@ application_routes.post('/api/reset-password', async (req, res) => {
   const { femail,ftoken,newPassword } = req.body;
   const storedToken = tokenDatabase[femail];
   if (!storedToken || storedToken !== ftoken) {
-    console.log('INV')
-    return res.status(400).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid token' });
   }
 
   const user = await User.findOne({ femail });
 
   if (!user) {
-    console.log("UNF")
     return res.status(400).json({ error: 'User not found' });
   }
 
   // Update the user's password (you should hash the newPassword before saving it)
-  user.password = newPassword;
+  
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
   await user.save();
 
   // Remove the used reset token from the tokenDatabase
   delete tokenDatabase[femail];
 
   res.status(200).json({ message: 'Password reset successfully' });
+  console.log("success")
 });
 
 //______________________________________________________________________________________________________________________________________________________________________________________________________
