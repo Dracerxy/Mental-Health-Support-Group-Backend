@@ -31,7 +31,7 @@ post_routes.get('/user-post/:_id',async(req,res)=>{
 post_routes.post("/new-post",async(req,res)=>{
     const post = req.body;
 
-    const newPostMessage = new PostSchema({ ...post, creator: req.userId, createdAt: new Date().toISOString() })
+    const newPostMessage = new PostSchema({ ...post, creator: req.email,name:req.usrname, createdAt: new Date().toISOString() })
 
     try {
         await newPostMessage.save();

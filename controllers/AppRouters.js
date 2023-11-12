@@ -21,18 +21,21 @@ const crypto = require('crypto');
     }
   
     const isPasswordValid = await bcrypt.compare(password, user.password);
-  
+    
+    if(user.googleauth){
+      return res.status(402).json({ error: 'User May Used Google Authentication For Login in!!' });
+    }
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid password' });
     }
   
     const token = jwt.sign({ id: user._id, email: user.email }, '6211eb3e330b634779d6cdc24db7b0e90a17d9');
-    res.status(200).json({ token,username: user.name });
+    res.status(200).json({ token,username: user.name,email:user.email });
   });
   
   application_routes.post('/signup', async (req, res) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password,googleauth } = req.body;
       const existingUser = await User.findOne({ email });
   
       if (existingUser) {
@@ -40,7 +43,7 @@ const crypto = require('crypto');
         return res.status(400).json({ error: 'User already exists' });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ name, email, password: hashedPassword });
+      const user = new User({ name, email, password: hashedPassword,googleauth });
       await user.save();
   
       const token = jwt.sign({ id: user._id, email: user.email }, '6211eb3e330b634779d6cdc24db7b0e90a17d9');
@@ -68,7 +71,9 @@ const transporter = nodemailer.createTransport({
 application_routes.post('/api/forgot-password', async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-
+  if(user.googleauth){
+    return res.status(402).json({ error: 'User May Used Google Authentication For Login in!!' });
+  }
   if (!user) {
     return res.status(400).json({ error: 'User not found' });
   }

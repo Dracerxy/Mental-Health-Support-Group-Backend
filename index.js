@@ -4,9 +4,6 @@ const session = require('express-session');
 const cors = require("cors");
 const bodyparser =require("body-parser");
 const application_routes = require("./controllers/AppRouters")
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const UserOauth = require('./schema/UserOauth'); 
 const post_routes = require("./controllers/PostRouters");
 const app=express()
 
