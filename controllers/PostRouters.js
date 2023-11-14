@@ -1,24 +1,19 @@
 const express=require("express");
 const post_routes= new express.Router();
 const PostSchema=require('../schema/PostSchema')
+const mongoose =require('mongoose');
 
 post_routes.get("/post",async(req, res) => {
-    const { page } = req.query;
-    
     try {
-        const LIMIT = 8;
-        const startIndex = (Number(page) - 1) * LIMIT; // get the starting index of every page
-    
-        const total = await PostSchema.countDocuments({});
-        const posts = await PostSchema.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
+        const posts = await PostSchema.find()
 
-        res.json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)});
+        res.json({ data: posts});
     } catch (error) {    
         res.status(404).json({ message: error.message });
     }
   });
-post_routes.get('/user-post/:_id',async(req,res)=>{
-    const { _id } = req.query;
+post_routes.get('/user-post/:id',async(req,res)=>{
+    const { _id } = req.params;
 
     try {
         const posts = await PostSchema.findById({ _id });
@@ -30,8 +25,7 @@ post_routes.get('/user-post/:_id',async(req,res)=>{
 })
 post_routes.post("/new-post",async(req,res)=>{
     const post = req.body;
-
-    const newPostMessage = new PostSchema({ ...post, creator: req.email,name:req.usrname, createdAt: new Date().toISOString() })
+    const newPostMessage = new PostSchema({ ...post, createdAt: new Date().toISOString() })
 
     try {
         await newPostMessage.save();
@@ -43,6 +37,7 @@ post_routes.post("/new-post",async(req,res)=>{
 })
 post_routes.post("/update-post/:id",async(req,res)=>{
     const { id } = req.params;
+    console.log(id)
     const { title, message, creator, selectedFile, tags } = req.body;
     
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
