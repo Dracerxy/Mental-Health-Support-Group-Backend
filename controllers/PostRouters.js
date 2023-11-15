@@ -12,13 +12,11 @@ post_routes.get("/",async(req, res) => {
         }
     });
   });
-post_routes.get('/user-post/:id',async(req,res)=>{
-    const { _id } = req.params;
-
+post_routes.get('/user-post/:email',async(req,res)=>{
+    const { email } = req.params;
     try {
-        const posts = await PostSchema.findById({ _id });
-
-        res.json({ data: posts });
+        const posts = await PostSchema.find({ creator: email });
+        res.json(posts);
     } catch (error) {    
         res.status(404).json({ message: error.message });
     }
