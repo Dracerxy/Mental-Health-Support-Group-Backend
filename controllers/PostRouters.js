@@ -58,26 +58,26 @@ post_routes.delete("/delete-post/:id",async(req,res)=>{
     res.json({ message: "Post deleted successfully." });
 })
 
-post_routes.post("/like-post/:id",async (req, res) => {
-    const { id } = req.params;
-
-    if (!req.userId) {
+post_routes.post("/like-post",async (req, res) => {
+    const { _id, email } = req.body;
+    console.log(_id,email)
+    if (req.email==="") {
         return res.json({ message: "Unauthenticated" });
       }
 
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send(`No post with id: ${_id}`);
     
-    const post = await PostSchema.findById(id);
+    const post = await PostSchema.findById(_id);
 
-    const index = post.likes.findIndex((id) => id ===String(req.userId));
+    const index = post.likes.findIndex((mail) => mail===String(email));
 
     if (index === -1) {
-      post.likes.push(req.userId);
+      post.likes.push(email);
     } else {
-      post.likes = post.likes.filter((id) => id !== String(req.userId));
+      post.likes = post.likes.filter((mail) => mail !== String(email));
     }
 
-    const updatedPost = await PostSchema.findByIdAndUpdate(id, post, { new: true });
+    const updatedPost = await PostSchema.findByIdAndUpdate(_id, post, { new: true });
 
     res.status(200).json(updatedPost);
 })
