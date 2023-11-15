@@ -7,8 +7,8 @@ const application_routes = require("./controllers/AppRouters")
 const post_routes = require("./controllers/PostRouters");
 const app=express()
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:true}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors({origin: "http://localhost:3000",
 methods: "GET,POST,PUT,DELETE",
 credentials: true,}));

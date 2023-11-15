@@ -26,7 +26,6 @@ post_routes.get('/user-post/:id',async(req,res)=>{
 post_routes.post("/new-post",async(req,res)=>{
     const post = req.body;
     const newPostMessage = new PostSchema({ ...post, createdAt: new Date().toISOString() })
-
     try {
         await newPostMessage.save();
 
