@@ -3,14 +3,14 @@ const post_routes= new express.Router();
 const PostSchema=require('../schema/PostSchema')
 const mongoose =require('mongoose');
 
-post_routes.get("/post",async(req, res) => {
-    try {
-        const posts = await PostSchema.find()
-
-        res.json({ data: posts});
-    } catch (error) {    
-        res.status(404).json({ message: error.message });
-    }
+post_routes.get("/",async(req, res) => {
+    PostSchema.find((err,data)=>{
+        if(err){
+            console.log(err)
+        }else{
+            return res.json(data)
+        }
+    });
   });
 post_routes.get('/user-post/:id',async(req,res)=>{
     const { _id } = req.params;
