@@ -60,7 +60,6 @@ post_routes.delete("/delete-post/:id",async(req,res)=>{
 
 post_routes.post("/like-post",async (req, res) => {
     const { _id, email } = req.body;
-    console.log(_id,email)
     if (req.email==="") {
         return res.json({ message: "Unauthenticated" });
       }
