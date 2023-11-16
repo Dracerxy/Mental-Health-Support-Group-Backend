@@ -77,20 +77,32 @@ post_routes.post("/like-post",async (req, res) => {
 
     res.status(200).json(updatedPost);
 })
-
-post_routes.put("/comment-post/:id",async (req, res) => {
+post_routes.put("/comment-post/:id", async (req, res) => {
     const { id } = req.params;
-    const { value } = req.body;
-    console.log(id)
-    const post = await PostSchema.findById(id);
+    const { text, username,email } = req.body;
+    try {
+        const post = await PostSchema.findById(id);
 
-    post.comments.push(value);
+        post.comments.push({ text, userName: username,email, createdAt: new Date() });
 
-    const updatedPost = await PostSchema.findByIdAndUpdate(id, post, { new: true });
+        const updatedPost = await PostSchema.findByIdAndUpdate(id, post, { new: true });
 
-    res.json(updatedPost);
+        res.json(updatedPost);
+    } catch (error) {
+        res.json(error);
+    }
 });
-
-
+post_routes.delete("/delete-comment/:postId/:commentId", async (req, res) => {
+    const { postId, commentId } = req.params;
+    console.log(postId,commentId)
+    try {
+        const post = await PostSchema.findById(postId);
+        post.comments = post.comments.filter(comment => comment._id.toString() !== commentId);
+        const updatedPost = await post.save();
+        res.json(updatedPost);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 module.exports = post_routes;
