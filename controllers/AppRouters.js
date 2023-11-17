@@ -35,7 +35,7 @@ const crypto = require('crypto');
   
   application_routes.post('/signup', async (req, res) => {
     try {
-      const { name, email, password,googleauth } = req.body;
+      const { name, email, password,googleauth,profilePicture } = req.body;
       const existingUser = await User.findOne({ email });
   
       if (existingUser) {
@@ -43,15 +43,46 @@ const crypto = require('crypto');
         return res.status(400).json({ error: 'User already exists' });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ name, email, password: hashedPassword,googleauth });
+      const user = new User({ name, email, password: hashedPassword,googleauth,profilePicture });
       await user.save();
   
       const token = jwt.sign({ id: user._id, email: user.email }, '6211eb3e330b634779d6cdc24db7b0e90a17d9');
-      res.status(201).json({ token });
+      res.status(201).json({ token,profilePicture });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   });
+
+ application_routes.get('/users/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = await User.find({ email: email }); 
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+  // Update user data
+  application_routes.put('/update-users/:email', async (req, res) => {
+    try {
+      const {email} = req.params;
+      const { name, expert, bioData } = req.body;
+      const updatedUser = await User.findOneAndUpdate(
+        { email: email },
+        { $set: { name, expert, bioData } },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      res.json(updatedUser);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
   
 //__________________________________________________________________________forgot_password_____________________________________________________________________________________________________________
 const tokenDatabase = {};

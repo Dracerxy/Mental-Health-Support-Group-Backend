@@ -34,7 +34,6 @@ post_routes.post("/new-post",async(req,res)=>{
 })
 post_routes.post("/update-post/:id",async(req,res)=>{
     const { id } = req.params;
-    console.log(id)
     const { title, message, creator, selectedFile, tags } = req.body;
     
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
