@@ -66,10 +66,10 @@ const crypto = require('crypto');
   application_routes.put('/update-users/:email', async (req, res) => {
     try {
       const {email} = req.params;
-      const { name, expert, bioData } = req.body;
+      const { name, expert, bioData,profilePicture } = req.body;
       const updatedUser = await User.findOneAndUpdate(
         { email: email },
-        { $set: { name, expert, bioData } },
+        { $set: { name, expert, bioData ,profilePicture} },
         { new: true }
       );
   
