@@ -128,7 +128,6 @@ application_routes.post('/api/forgot-password', async (req, res) => {
       console.error(error);
       res.status(500).json({ error: 'Failed to send password reset email' });
     } else {
-      console.log('Password reset email sent');
       res.status(200).json({ message: 'Password reset email sent successfully' ,token_:resetToken});
     }
   });
@@ -160,7 +159,6 @@ application_routes.post('/api/reset-password', async (req, res) => {
   delete tokenDatabase[femail];
 
   res.status(200).json({ message: 'Password reset successfully' });
-  console.log("success")
 });
 
 //______________________________________________________________________________________________________________________________________________________________________________________________________

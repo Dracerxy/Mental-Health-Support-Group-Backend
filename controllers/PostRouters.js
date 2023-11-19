@@ -93,7 +93,6 @@ post_routes.put("/comment-post/:id", async (req, res) => {
 });
 post_routes.delete("/delete-comment/:postId/:commentId", async (req, res) => {
     const { postId, commentId } = req.params;
-    console.log(postId,commentId)
     try {
         const post = await PostSchema.findById(postId);
         post.comments = post.comments.filter(comment => comment._id.toString() !== commentId);
