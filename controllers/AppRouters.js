@@ -114,7 +114,7 @@ application_routes.post('/api/forgot-password', async (req, res) => {
   tokenDatabase[email] = resetToken;
 
   // Send a password reset email to the user (configure nodemailer)
-  const resetLink = `http://localhost:3000/reset-password/token=${resetToken}/email=${email}`;
+  const resetLink = `https://mindwell-connect-frontend.vercel.app/reset-password/token=${resetToken}/email=${email}`;
   const mailOptions = {
     from: 'mntIhIthcrspprt@gmail.com',
     to: email,
