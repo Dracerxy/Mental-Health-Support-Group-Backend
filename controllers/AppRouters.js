@@ -113,25 +113,25 @@ const axios = require('axios');
   }
 });
   // Update user data
-  application_routes.put('/update-users/:email', async (req, res) => {
-    try {
-      const {email} = req.params;
-      const { name, expert, bioData,profilePicture } = req.body;
-      const updatedUser = await User.findOneAndUpdate(
-        { email: email },
-        { $set: { name, expert, bioData ,profilePicture,MFA} },
-        { new: true }
-      );
-  
-      if (!updatedUser) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-  
-      res.json(updatedUser);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+application_routes.put('/update-users/:email', async (req, res) => {
+  try {
+    const {email} = req.params;
+    const { name, expert, bioData,profilePicture,MFA } = req.body;
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { $set: { name, expert, bioData ,profilePicture,MFA} },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
     }
-  });
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
   
   
 //__________________________________________________________________________forgot_password_____________________________________________________________________________________________________________
