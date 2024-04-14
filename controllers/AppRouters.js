@@ -119,7 +119,7 @@ const axios = require('axios');
       const { name, expert, bioData,profilePicture } = req.body;
       const updatedUser = await User.findOneAndUpdate(
         { email: email },
-        { $set: { name, expert, bioData ,profilePicture} },
+        { $set: { name, expert, bioData ,profilePicture,MFA} },
         { new: true }
       );
   
