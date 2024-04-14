@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const User = require('../schema/UserDataSchema');  
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-
+const axios = require('axios');
 //_________________________________________________________________________google authentication_______________________________________________________________________________________
 
 
