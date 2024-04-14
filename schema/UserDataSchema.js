@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   expert: { type: Boolean, default: false },
+  MFA: { type: Boolean, default: false },
   googleauth: { type: Boolean, default: false },
   id: { type: String },
   profilePicture: { type: String,default:null },

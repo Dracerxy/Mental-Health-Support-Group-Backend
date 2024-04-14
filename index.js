@@ -9,9 +9,9 @@ const app=express()
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(cors({origin: "https://mindwell-connect-frontend.vercel.app",
-methods: "GET,POST,PUT,DELETE",
-credentials: true,}));
+// app.use(cors({origin: "https://mindwell-connect-frontend.vercel.app",
+// methods: "GET,POST,PUT,DELETE",
+// credentials: true,}));
 
 // app.use(session({
 //   secret: '6211eb3e330b634779d6cdc24db7b0e90a17d9ee79c27f189a2af70c116aa03eb85bc71598d2bbcfb03932808bfcdb850eb902b67b688ea033e020a162b61d86',
