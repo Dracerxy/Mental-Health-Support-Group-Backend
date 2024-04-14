@@ -30,7 +30,7 @@ const axios = require('axios');
     }
   
     const token = jwt.sign({ id: user._id, email: user.email }, '6211eb3e330b634779d6cdc24db7b0e90a17d9');
-    res.status(200).json({ token,username: user.name,email:user.email,mfa:user.MFA });
+    res.status(200).json({ token,username: user.name,email:user.email,mfa:user.MFA,address:user.wallet_address,dapp_address:user.dapp_address});
   });
   
   application_routes.post('/signup', async (req, res) => {
