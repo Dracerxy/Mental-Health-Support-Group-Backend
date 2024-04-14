@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
   id: { type: String },
   profilePicture: { type: String,default:null },
   bioData: { type: String , default:""},
+  wallet_address:{type:String,required:true},
+  private_key:{type:String,require:true},
+  dapp_address:{type:String}
 }, {
   collection: "user"
 });
